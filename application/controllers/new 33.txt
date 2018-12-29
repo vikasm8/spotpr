@@ -1,0 +1,366 @@
+#!/bin/bash
+## Purpose: Import CSV files to Oracle DB
+## By : Vikas.Motkur@aa.com
+
+
+# Version v11 - release notes
+# * Process files only if modified within MAX_FILE_AGE
+# * Added new dat file server_detailed_data
+
+# Version v10 - Release notes:
+# * Fixed the pid file creation location
+# * Fixed oracle env when running in cron
+# * Removing skipped or processed from from INPROCESS directory
+
+# Version v9 - Release notes:
+# * Added write permission in script dir
+# * Checking the response status of mkdir non existing directories
+
+# Version v8 - Release notes:
+# * Added more reporting for file permissions
+# * Alert if there is no read permission to input file
+# * Included write permission  check for INPUT folder in the existing code block
+# * Feature to skip duplicate files
+
+
+
+## Define Contants
+
+
+ORACLE_SID="EM13CPRD"
+ORACLE_HOME="/db/app/oracle/product/12.1.0/dbhome_1"
+TNS_ADMIN="/db/app/oracle/product/12.1.0/dbhome_1/network/admin"
+ORACLESRV="EM13CPRD"
+ORACLEHOME="/db/app/oracle/product/12.1.0/dbhome_1"
+INPUT_DIR="/xdbs_orabackup/infrastructure"
+INPUT_FILENAME_CPU="cpu_detailed"
+INPUT_FILENAME_KERNEL="kernel"
+INPUT_FILENAME_MEMORY="memory"
+ARCHIVE_DIR="/xdbs_orabackup/infrastructure/ARCHIVE"
+PID_FILE=/xdbs_orabackup/infrastructure/LOCK/`basename $0`.pid
+PS_BIN="/bin/ps"
+TMP_PROCESS_DIR=/xdbs_orabackup/infrastructure/INPROCESS
+PROCESS_ERROR_DIR=/xdbs_orabackup/infrastructure/ERROR
+SQLPLUS_BIN="/db/app/oracle/product/12.1.0/dbhome_1/bin/sqlplus"
+SQLLDR_BIN="/db/app/oracle/product/12.1.0/dbhome_1/bin/sqlldr"
+SQLLDR_AUTH="infraload/infraload@DBIREPO"
+SQLLDR_CONTROL_CPU="/xdbs_orabackup/infrastructure/CONTROL/cpu_perf.ctl"
+SQLLDR_CONTROL_KERNEL="/xdbs_orabackup/infrastructure/CONTROL/kernel_info.ctl"
+SQLLDR_CONTROL_MEMORY="/xdbs_orabackup/infrastructure/CONTROL/memory_perf.ctl"
+SQLLDR_CONTROL_SERVER_DATA="/xdbs_orabackup/infrastructure/CONTROL/server_data.ctl"
+SQLLDR_LOG="/xdbs_orabackup/infrastructure/LOG/sqllldr.log"
+TIMESTAMP=`date +"%s"`
+PROCESS_LOG="/xdbs_orabackup/infrastructure/LOG/process.log"
+MAIL_CMD="/usr/bin/mailx"
+#MAIL_TO="dl_rmdba@aa.com"
+MAIL_TO="vikas.motkur@aa.com"
+SCRIPT_DIR=`dirname $0`
+EXTRA_PATH="/usr/local/bin"
+MAX_FILE_AGE=2    # In days
+
+
+# Setting the PATH
+export PATH=$PATH:$EXTRA_PATH
+
+echo "Processing directory:"`pwd`
+
+function pre_checks() {
+    ## Checking if directories exists, if not echo message and create them
+    [[ ! -d $TMP_PROCESS_DIR ]] && NOEXIST="$NOEXIST $TMP_PROCESS_DIR"
+    [[ ! -d $INPUT_DIR ]] && NOEXIST="$NOEXIST $INPUT_DIR"
+    [[ ! -d $ARCHIVE_DIR ]] && NOEXIST="$NOEXIST $ARCHIVE_DIR"
+    [[ ! -d $PROCESS_ERROR_DIR ]] && NOEXIST="$NOEXIST $PROCESS_ERROR_DIR"
+    [[ ! -d `dirname $PID_FILE` ]] && NOEXIST="$NOEXIST `dirname $PID_FILE`"
+    [[ ! -d `dirname $PROCESS_LOG` ]] && NOEXIST="$NOEXIST `dirname $PROCESS_LOG`"
+    [[ ! -d `dirname $SQLLDR_LOG` ]] && NOEXIST="$NOEXIST `dirname $SQLLDR_LOG`"
+    [[ ! -d `dirname $PROCESS_LOG` ]] && NOEXIST="$NOEXIST `dirname $PROCESS_LOG`"
+
+    [[ ! -z $NOEXIST ]] && echo "Following directories doesn't exists. Creating them. $NOEXIST"
+
+    # Create directories if not exists
+    mkdir -p $TMP_PROCESS_DIR $INPUT_DIR $ARCHIVE_DIR `dirname $PID_FILE` `dirname $PROCESS_LOG` `dirname $SQLLDR_LOG` `dirname $PROCESS_LOG` $PROCESS_ERROR_DIR
+
+    if [ $? == 0 ]
+    then
+            logger "info" "precheck pass - directories created $NOEXIST"
+    else
+            logger "error" "precheck failed - Unable to create directory $NOEXIST"
+            exit 1
+    fi
+
+
+    # Checking if directories are writable
+    if [ -w $INPUT_DIR ] &&  [ -w $ARCHIVE_DIR ] && [ -w $TMP_PROCESS_DIR ] && [ -w `dirname $SQLLDR_LOG` ] && [ -w `dirname PROCESS_LOG` ] && [ -w $PROCESS_ERROR_DIR ] && [ -w $SCRIPT_DIR ]
+        then
+              logger "info" "precheck pass - all directories are writable"
+        else
+              logger "error" "precheck failed - not all or some directories are not writable"
+              exit 1
+    fi
+
+    # Checking for Control files
+    if [ -f $SQLLDR_CONTROL_CPU ] && [ -f  $SQLLDR_CONTROL_KERNEL ] && [ -f  $SQLLDR_CONTROL_MEMORY ]
+        then
+            logger "info" "precheck pass - Control files exists"
+    else
+            logger "error" "precheck failed - Control file $SQLLDR_CONTROL_CPU or $SQLLDR_CONTROL_KERNEL or $SQLLDR_CONTROL_MEMORY does not exists"
+            exit 1
+    fi
+
+    # Checking if mailutils installed or not
+    if [ ! -f $MAIL_CMD ]
+    then
+            logger "error" "precheck failed - $MAIL_CMD not exists. Missing package mailutils."
+            echo "Error: precheck failed - $MAIL_CMD not exists. Missing package mailutils."
+            exit 1
+    fi
+
+    # Checking if sqlldr installed or not
+    if [ ! -f $SQLLDR_BIN ]
+    then
+            logger "error" "precheck failed - $SQLLDR_BIN not exists. Please check the path."
+            echo "Error: precheck failed - $SQLLDR_BIN not exists. Please check the path."
+            exit 1
+    fi
+
+}
+
+
+# Function manage PID
+function process_pid {
+# Check PID and exit scrit if its already running
+if [ -f $PID_FILE ]
+then
+      logger "error" "PID file exists, exiting. Script is locked, check read me for instructions"
+      send_mail "ERROR - Infraload script locked" "Hello Team, \nSomething went wrong and .PID file was not removed. Please troubleshoot manually to resolve this. \n\n PID file location \n$PID_FILE"
+      exit 1
+else
+    # Create process id to PID file
+    echo $$>$PID_FILE
+fi
+}
+
+
+# Function logger
+function logger {
+        echo "`date +"%Y-%m-%d %H:%M:%S"` [$1] $2">>$PROCESS_LOG
+}
+
+
+# Function Data Processing Starts here
+function process_data_files {
+  echo $INPUT_DIR/$1
+  echo "ARGUMENT = $1"
+  if [ "$1" == "ALL" ]
+  then
+         FILE_LIST=`ls -1 $INPUT_DIR/*.dat 2>/dev/null`
+         INPUT_FILE_COUNT=`ls -1 $INPUT_DIR/*.dat 2>/dev/null|wc -l`
+  else
+         FILE_LIST=`ls -1 $INPUT_DIR/$1 2>/dev/null`
+         INPUT_FILE_COUNT=1
+  fi
+
+
+  # Checking if input directory is empty or not
+  if [  "$INPUT_FILE_COUNT" == "0" ]
+  then
+       echo "No datafiles files found in input directory $INPUT_DIR please stage them in here"
+  fi
+
+  for FILE in $FILE_LIST
+  do
+        echo "inside for loop - $FILE"
+        if [ -s $FILE ]
+        then
+             SQLLDR_CONTROL=""
+             # Selecting the control file
+             [[ $FILE =~ cpu_detailed ]] && SQLLDR_CONTROL=$SQLLDR_CONTROL_CPU
+             [[ $FILE =~ kernel ]] && SQLLDR_CONTROL=$SQLLDR_CONTROL_KERNEL
+             [[ $FILE =~ memory ]] && SQLLDR_CONTROL=$SQLLDR_CONTROL_MEMORY
+
+             # If no match for control files, log it and exit
+             if [ -z $SQLLDR_CONTROL ]
+             then
+                   logger "error" "No pattern match found for $INPUT_FILENAME_CPU and $INPUT_FILENAME_KERNEL. Skipping file $FILE"
+                   echo "Data files found but no match for $FILE so skipping it."
+                   continue
+             fi
+
+             # Moving file to processing directory
+             TEMP_FILE=`basename $FILE`.$$
+             TEMP_FILE_ORG=`basename $FILE`
+
+             # Checking if file got read permission
+             if [ ! -r $FILE ]
+             then
+                  send_mail "ERROR - Infraload script- file read failed" "Hello Team, \nSomething went wrong and unable to read $FILE . \n\n Please check the file permissions!"
+                  exit 1
+             fi
+
+
+             mv $FILE $TMP_PROCESS_DIR/$TEMP_FILE
+
+             # Send email if mv failed and exit the script
+             if [ $? != 0 ]
+             then
+                  send_mail "ERROR - Infraload script- file move failed" "Hello Team, \nSomething went wrong and unable to move $FILE to $TMP_PROCESS_DIR. \n\n Please check more"
+                  exit 1
+             fi
+
+             #sqlldr
+                   SQLLDR_OUT=`$SQLLDR_BIN USERID=$SQLLDR_AUTH DATA=$TMP_PROCESS_DIR/$TEMP_FILE CONTROL=$SQLLDR_CONTROL LOG=$SQLLDR_LOG 2>&1`
+             #SQLLDR_OUT=`$SQLLDR_BIN USERID=$SQLLDR_AUTH DATA=$TMP_PROCESS_DIR/$TEMP_FILE ERRORS=100000000 SILENT=ERRORS CONTROL=$SQLLDR_CONTROL LOG=$SQLLDR_LOG 2>&1`
+                    logger "success" "data file processing success: $TEMP_FILE"
+                    logger "info" "$TEMP_FILE - `cat $SQLLDR_LOG|grep 'Rows successfully loaded'`"
+                    # Updating Staging file with filename and inserting data to master table
+                    SQLLDR_CONTROL_FILE=`basename $SQLLDR_CONTROL`
+                    TABLE_NAME=`echo $SQLLDR_CONTROL_FILE|awk -F "." '{print $1}'`
+                    echo "spool staging.log;" > staging.sql
+                    echo "update infraload."$TABLE_NAME"_staging set FILE_NAME= '$TEMP_FILE' ;" >> staging.sql
+                    echo "insert into  infraload."$TABLE_NAME"_detailed_data select * from infraload."$TABLE_NAME"_staging;" >> staging.sql
+                    echo "Truncate table infraload."$TABLE_NAME"_staging;" >> staging.sql
+                    echo "spool off;" >> staging.sql
+                    echo "exit;" >> staging.sql
+                    #sqlplus
+                    $SQPLUS_BIN -s $SQLLDR_AUTH @staging.sql
+                    if [ $? != 0 ]
+                        then
+                                logger "error" "sqlplus data update failed.."
+                                send_mail "Error: sqlplus data update failed. Please check staging.sql file" "Hello, \n  $TMP_PROCESS_DIR/$TEMP_FILE encountered a problem while processing the staging.sql file.. Please check." "Y" "staging.sql"
+                                archive_files "$TEMP_FILE"
+                                exit 1
+                        else
+                                logger "success" "sqlplus return success..!"
+                        fi
+
+                   if [ -f ../$TEMP_FILE_ORG.bad ]
+                   then
+                         logger "error" "data file processing error: $? $TEMP_FILE . Moving to error dir. Error: $SQLLDR_OUT"
+                         logger "error" "Bad file contents $TEMP_FILE_ORG.bad - `cat ../$TEMP_FILE_ORG.bad`"
+                         mv $TMP_PROCESS_DIR/$TEMP_FILE $PROCESS_ERROR_DIR
+                         mv ../$TEMP_FILE_ORG.bad $PROCESS_ERROR_DIR
+                         echo "$TEMP_FILE">>files_process_error.txt
+                         ERROR_ARCHIVE=$ERROR_ARCHIVE" $PROCESS_ERROR_DIR/$TEMP_FILE_ORG.bad "
+                         echo "ERROR ARCHINE : $ERROR_ARCHIVE"
+                   else
+                        archive_files "$TEMP_FILE"
+                        echo "$TEMP_FILE">>files_processed.txt
+                        echo "Step final"
+                   fi
+
+         else
+             logger "error" "data file empty: $FILE"
+         fi
+  done
+
+  # Send Email if there is any error
+  if [ -s ./files_process_error.txt ]
+  then
+        # Archiving Error files
+        tar -czf $PROCESS_ERROR_DIR/ERROR-archived-$$-$TIMESTAMP.tar.gz $ERROR_ARCHIVE
+        send_mail "ERROR : Processing infra dataload for `date  +"%m-%d-%Y"` " "Hello Team,\n The following .dat files were in error while loading on `date  +"%m-%d-%Y"` \n\n Number of files in error: `cat files_process_error.txt|wc -l`  \n\n List of files in error... \n `cat files_process_error.txt`" "Y" "$PROCESS_ERROR_DIR/ERROR-archived-$$-$TIMESTAMP.tar.gz"
+
+  fi
+
+  # Send Summary Email if everything goes well
+  if [ -s ./files_process_error.txt ] ||  [ -s ./files_processed.txt ] || [ -s ./files_duplicate.txt ]
+  then
+     send_mail "SUMMARY : Processing infra dataload for `date  +"%m-%d-%Y"` " "Hello Team,\n Date: `date  +"%m-%d-%Y"` \n\n Number of files successfully loaded: `cat files_processed.txt 2>/dev/null|wc -l`  \n\n List of files successfully processed... \n `cat files_processed.txt 2>/dev/null` \n\n Number of files in error: `cat files_process_error.txt 2>/dev/null|wc -l`  \n\n List of files in error... \n `cat files_process_error.txt 2>/dev/null` \n\n List of files skipped processing becasue of duplicates... \n `cat files_duplicate.txt 2>/dev/null`"
+  fi
+
+  # Nuking files_processed.txt,  files_process_error.txt and files_duplicate.txt after Sending mail for a batch
+  rm -f files_processed.txt
+  rm -f files_process_error.txt
+  rm -f files_duplicate.txt
+  #rm -f $PROCESS_ERROR_DIR/ERROR-archived-$$-$TIMESTAMP.tar.gz
+
+}
+
+
+# Function Archiving files
+function archive_files {
+
+ARCHIVE_FILE=$1
+
+if [ ! -z "$ARCHIVE_FILE" ]
+then
+    tar -czf $ARCHIVE_DIR/$ARCHIVE_FILE-archived-$$-$TIMESTAMP.tar.gz $TMP_PROCESS_DIR/$1 2>/dev/null
+    if [ $? == 0 ]
+        then
+            logger "success" "files archive success $ARCHIVE_FILE-archived-$$-$TIMESTAMP.tar.gz"
+            rm -f $TMP_PROCESS_DIR/$1
+    else
+         logger "error" "files archive error $ARCHIVE_FILE-archived-$$-$TIMESTAMP.tar.gz"
+    fi
+fi
+
+echo "Removing file from INPROCESS directory"
+rm -f  $TMP_PROCESS_DIR/$1
+if [ $? == 0 ]
+then
+       logger "info" "File removed successfully! $TMP_PROCESS_DIR/$1"
+else
+       logger "error" "File remove error! $TMP_PROCESS_DIR/$1"
+
+fi
+
+}
+
+# Function for sending email
+function send_mail {
+    MAIL_SUBJECT=$1
+    MAIL_BODY=$2
+    MAIL_ATTACH_FLAG=$3
+    MAIL_ATTACH_FILE=$4
+    echo "$MAIL_SUBJECT || $MAIL_BODY || $MAIL_ATTACH_FLAG || $MAIL_ATTACH_FILE"
+    MAIL_ATTACH_OPT=""
+    echo "Mail Attach flag: $MAIL_ATTACH_FLAG"
+    [[ "$MAIL_ATTACH_FLAG" == "Y" ]] && MAIL_ATTACH_OPT=" -a $MAIL_ATTACH_FILE"
+
+    # Sending mail
+    echo -e "$MAIL_BODY"|$MAIL_CMD -s "$MAIL_SUBJECT"  $MAIL_ATTACH_OPT $MAIL_TO
+    echo -e "$MAIL_BODY $MAIL_CMD -s" "$MAIL_SUBJECT" $MAIL_TO $MAIL_ATTACH_OPT
+}
+
+# Function Parse command line argument file
+function get_arg_file {
+    if [ -z "$1" ]
+    then
+           # Scan all files
+           local SCAN="ALL"
+    else
+           # Process only the file
+           if [ -f $INPUT_DIR/$1 ]
+           then
+                 logger "info" "Input file $1 exists. Proceed.. "
+                 local SCAN=$1
+           else
+                 logger "error" "Input file $1 doesnot exists. Please check the file in directory $INPUT_DIR"
+                 kill -s TERM $TOP_PID
+           fi
+
+    fi
+    echo $SCAN
+}
+
+
+
+## Script Mail Starts here
+
+# Setting Oracle ENV
+. oraenv << INPUT
+$ORACLESRV
+INPUT
+
+pre_checks
+process_pid
+trap "exit 1" TERM
+export TOP_PID=$$
+
+FILE_INDEX=`get_arg_file $1`
+process_data_files $FILE_INDEX
+
+# Remove PID file If qualifies all checks
+rm -f $PID_FILE
+
+
