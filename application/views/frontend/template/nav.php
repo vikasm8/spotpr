@@ -13,7 +13,7 @@
             </div>
             <div class="logo logo-mini">
                 <a href="#" class="simple-text">
-                  Control Panel
+                  CP
                 </a>
             </div>
             <div class="sidebar-wrapper">
@@ -38,9 +38,27 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
+                     <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
+                        <a href="<?php echo base_url()?>dashboard">
+                            <i class="material-icons">dashboard</i>
+                            <p>Master Server Inventory</p>
+                        </a>
+                    </li>
+                     <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
+                        <a href="<?php echo base_url()?>srtracker">
+                            <i class="material-icons">dashboard</i>
+                            <p>SR Tracker</p>
+                        </a>
+                    </li>
+                    <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
+                        <a href="<?php echo base_url()?>users">
+                            <i class="material-icons">dashboard</i>
+                            <p>Team Mates</p>
+                        </a>
+                    </li>
                     
                     <li class="<?php echo (checkTabActive(array("logout")))? "active" : ""; ?>">
-                        <a href="<?php echo base_url();?>admin/logout">
+                        <a href="<?php echo base_url();?>logout">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             <p>logout</p>
                         </a>

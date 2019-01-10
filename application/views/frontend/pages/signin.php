@@ -99,8 +99,8 @@ th.sorting {
                                         <div class="input-group">
                                            
                                             <div class="form-group label-floating">
-                                                <label class="control-label">Please Enter Passcode</label>
-                                                <input type="password" name="password"  class="form-control">
+                                                <label class="control-label">Please Enter Email</label>
+                                                <input type="email" name="password"  class="form-control">
                                             </div>
                                         </div>
                                     </div>

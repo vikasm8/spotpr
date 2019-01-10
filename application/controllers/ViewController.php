@@ -107,15 +107,12 @@ class ViewController extends CI_Controller {
 			$row = $this->db->query('SELECT ESP.id_sequence.NEXTVAL FROM CAPSPLAN_DATA')->row();
 			if ($row) {
 			    $maxid = $row->NEXTVAL; 
-				//print_r($row);die;
-			   // $maxid = $maxid +1 ;
+				
 			}
-			//echo $maxid; die
-		     //$sql =  "INSERT into CAPSPLAN_DATA (ID,SERVER) values('".$maxid."','".$SERVER."')";
+			
 		    $sql =  "INSERT into CAPSPLAN_DATA (ID,SERVER,OS,BLADE) values('".$maxid."','".$SERVER."','".$OS."','".$BLADE."')";
 			 $res = $this->db->query($sql);
 		
-			//$res = $this->db->query("INSERT into $table (ID,SERVER) values($maxid,$SERVER)");
 
 
 			//echo $sql;die;
@@ -269,6 +266,296 @@ class ViewController extends CI_Controller {
 	  // redirect('admin/dashboard'); 
 	}
 
+	 /* ------------------------------------------------------------------------------------*/
+
+    /*-------------- Define Methods for SR Tracker-------------------------*/
+
+
+	public function srtracker(){
+
+        $query = $this->db->query('SELECT * FROM SR_TRACKER');
+
+		$dataUser = $query->result_array();
+		
+		$data = [
+			'title' => 'Manage Capsplan Data',
+			'pages' => 'user_dashboard',
+			'user' => $dataUser
+		];
+		$this->load->view('frontend/template/header');
+		$this->load->view('frontend/template/nav');
+		$this->load->view('frontend/pages/srtracker', $data);
+		$this->load->view('frontend/template/footer');
+	}
+
+	public function add_tracker()
+	{
+		if(isset($_POST['btnSubmit']))
+		{
+			
+			$jira_number = $this->input->post('jira_number');
+		    $database_name = $this->input->post('database_name'); 
+			$sr_number = $this->input->post('sr_number');
+			$sr_name = $this->input->post('sr_name');
+			$start_date = $this->input->post('start_date');
+			$change_number = $this->input->post('change_number');
+			$change_status = $this->input->post('change_status');
+			
+			$date 	 = date('m-d-Y');
+			
+
+			$res = $this->common_model->insertRecord('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status,'CREATED_DATE' => $date ));
+			if($res)
+			{
+				$this->session->set_flashdata('success','Record has been updated successfully.');
+				redirect('srtracker');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Some internal issue occure. Please try again.');
+			}
+		}
+		else
+		{
+
+			    
+				$this->load->view('frontend/pages/add_tracker');
+				
+
+		}
+		
+		
+	}
+	
+	public function view_tracker($id='')
+	{
+
+		if(!empty($id))
+		{
+			
+			$dataInfo = $this->common_model->getSingleRecordById('SR_TRACKER',array('id' => $id));
+			
+			
+			if(!empty($dataInfo))
+			{
+				$data['dataInfo'] = $dataInfo;
+
+				$this->load->view('frontend/template/header');
+				$this->load->view('frontend/template/nav');
+				$this->load->view('frontend/pages/view_tracker',$data);
+				$this->load->view('frontend/template/footer');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Invalid request.');
+				//redirect('admin/unapprove_request',true);
+			}
+		}
+		else
+		{
+			//redirect('admin/unapprove_request',true);
+		}
+	}
+	
+	public function edit_tracker($id='')
+	{
+		if(isset($_POST['btnUpdate']))
+		{
+			$jira_number = $this->input->post('jira_number');
+		    $database_name = $this->input->post('database_name'); 
+			$sr_number = $this->input->post('sr_number');
+			$sr_name = $this->input->post('sr_name');
+			$start_date = $this->input->post('start_date');
+			$change_number = $this->input->post('change_number');
+			$change_status = $this->input->post('change_status');
+			
+			
+
+
+			$res = $this->common_model->updateData('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status),array('id'=>$id));
+			if($res)
+			{
+				$this->session->set_flashdata('success','Data has been updated successfully.');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Some internal issue occure. Please try again.');
+			}
+		}
+
+		if(!empty($id))
+		{
+			
+			$dataInfo = $this->common_model->getSingleRecordById('SR_TRACKER',array('id' => $id));
+			if(!empty($dataInfo))
+			{
+				
+				$data['dataInfo'] = $dataInfo;
+				$this->load->view('frontend/template/header');
+				$this->load->view('frontend/template/nav');
+				$this->load->view('frontend/pages/edit_tracker',$data);
+				$this->load->view('frontend/template/footer');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Invalid id.');
+				redirect('admin/dashboard');
+			}
+		}
+		else
+		{
+			redirect('admin/dashboard');
+		}
+	}
+
+	
+	public function exportCSVSR(){ 
+	   // file name 
+	   $filename = 'data_'.date('Ymd').'.csv'; 
+	   header("Content-Description: File Transfer"); 
+	   header("Content-Disposition: attachment; filename=$filename"); 
+	   header("Content-Type: application/csv; ");
+	   
+	   $first_date = $this->input->post('first_date');
+	   $second_date = $this->input->post('second_date'); 
+	    
+	   $first_date = date("d-M-y", strtotime($first_date));
+	   $second_date = date("d-M-y", strtotime($second_date));
+    
+	   $result = $this->common_model->searchRecord('SR_TRACKER', $first_date,$second_date);
+	   //print_r($result); die;
+
+	   // file creation 
+	   $file = fopen('php://output', 'w');
+	   
+	   $database_name = $this->input->post('database_name'); 
+			$sr_number = $this->input->post('sr_number');
+			$sr_name = $this->input->post('sr_name');
+			$start_date = $this->input->post('start_date');
+			$change_number = $this->input->post('change_number');
+			$change_status = $this->input->post('change_status');
+	   
+	   $header = array("jira_number","database_name","sr_number","sr_name","start_date","change_number","change_status","CREATED_DATE"); 
+	   fputcsv($file, $header);
+	   foreach ($result as $key=>$line){ 
+	     fputcsv($file,$line); 
+	   }
+	   fclose($file); 
+	  // redirect('admin/dashboard'); 
+	}
+
+
+	/* ----------------- END Define Methods for SR Tracker------------------*/
+   
+    /* ------------------------------------------------------------------------------------*/
+
+     /* ----------------- Define Methods for Team Mates------------------*/
+
+    public function users(){
+
+        $query = $this->db->query('SELECT * FROM users');
+
+		$dataUser = $query->result_array();
+		
+		$data = [
+			'title' => 'Manage Capsplan Data',
+			'pages' => 'user_dashboard',
+			'user' => $dataUser
+		];
+		$this->load->view('frontend/template/header');
+		$this->load->view('frontend/template/nav');
+		$this->load->view('frontend/pages/users', $data);
+		$this->load->view('frontend/template/footer');
+	}
+
+	public function add_user()
+	{
+		if(isset($_POST['btnSubmit']))
+		{
+			$name = $this->input->post('name');
+		    $username = $this->input->post('username'); 
+			$password = $this->input->post('password');
+			$email = $this->input->post('email');
+			$phone = $this->input->post('phone');
+			$access = $this->input->post('access');
+			$user_status = $this->input->post('user_status');
+			
+			
+
+
+			$res = $this->common_model->insertRecord('users',array('name' => $name,'username' => $username,'password' => $password,'email' => $email,'phone' => $phone,'access' => $access,'user_status' => $user_status));
+			if($res)
+			{
+				$this->session->set_flashdata('success','User has been updated successfully.');
+				redirect('users');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Some internal issue occure. Please try again.');
+			}
+		}
+		else
+		{
+
+			    
+				$this->load->view('frontend/pages/add_user');
+				
+
+		}
+
+	}
+	public function edit_user($id='')
+	{
+		if(isset($_POST['btnUpdate']))
+		{
+			$name = $this->input->post('name');
+		    $username = $this->input->post('username'); 
+			$password = $this->input->post('password');
+			$email = $this->input->post('email');
+			$phone = $this->input->post('phone');
+			$access = $this->input->post('access');
+			$user_status = $this->input->post('user_status');
+			
+			
+
+
+			$res = $this->common_model->updateData('users',array('name' => $name,'username' => $username,'password' => $password,'email' => $email,'phone' => $phone,'access' => $access,'user_status' => $user_status),array('id'=>$id));
+			if($res)
+			{
+				$this->session->set_flashdata('success','User has been updated successfully.');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Some internal issue occure. Please try again.');
+			}
+		}
+
+		if(!empty($id))
+		{
+			
+			$dataInfo = $this->common_model->getSingleRecordById('users',array('id' => $id));
+			if(!empty($dataInfo))
+			{
+				
+				$data['dataInfo'] = $dataInfo;
+				$this->load->view('frontend/template/header');
+				$this->load->view('frontend/template/nav');
+				$this->load->view('frontend/pages/edit_user',$data);
+				$this->load->view('frontend/template/footer');
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Invalid id.');
+				redirect('admin/users');
+			}
+		}
+		else
+		{
+			redirect('admin/dashboard');
+		}
+	}
+
+	/* ----------------- End Define Methods for Team Mates------------------*/
 
 }
 
