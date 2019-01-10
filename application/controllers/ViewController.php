@@ -483,7 +483,7 @@ class ViewController extends CI_Controller {
 			
 
 
-			$res = $this->common_model->insertRecord('users',array('name' => $name,'username' => $username,'password' => $password,'email' => $email,'phone' => $phone,'access' => $access,'user_status' => $user_status));
+			$res = $this->common_model->insertRecord('users',array('uname' => $name,'username' => $username,'upassword' => $password,'email' => $email,'phone' => $phone,'access_level' => $access,'user_status' => $user_status));
 			if($res)
 			{
 				$this->session->set_flashdata('success','User has been updated successfully.');
@@ -519,7 +519,7 @@ class ViewController extends CI_Controller {
 			
 
 
-			$res = $this->common_model->updateData('users',array('name' => $name,'username' => $username,'password' => $password,'email' => $email,'phone' => $phone,'access' => $access,'user_status' => $user_status),array('id'=>$id));
+			$res = $this->common_model->updateData('users',array('uname' => $name,'username' => $username,'upassword' => $password,'email' => $email,'phone' => $phone,'access_level' => $access,'user_status' => $user_status),array('id'=>$id));
 			if($res)
 			{
 				$this->session->set_flashdata('success','User has been updated successfully.');
