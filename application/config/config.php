@@ -16,7 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				RewriteRule ^(.*)$ index.php/$1 [L]
 */
 				
-$config['base_url'] = 'http://localhost:4000/rptops/';
+$config['base_url'] = 'http://localhost/spotpr';
 $config['index_page'] = '';
 
 /*

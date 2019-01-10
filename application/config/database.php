@@ -8,39 +8,16 @@ $hostname = '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT =
         (CONNECT_DATA =(SID=RPTOPS)))';
 
 
-$db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => $hostname,
-	'username' => 'esp',
-	'password' => 'Esp_123',
-	'database' => 'rptops',
-	'dbdriver' => 'oci8',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' =>FALSE,
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
-
 // $db['default'] = array(
 // 	'dsn'	=> '',
-// 	'hostname' => 'localhost',
-// 	'username' => 'root',
-// 	'password' => '',
+// 	'hostname' => $hostname,
+// 	'username' => 'esp',
+// 	'password' => 'Esp_123',
 // 	'database' => 'rptops',
-// 	'dbdriver' => 'mysqli',
+// 	'dbdriver' => 'oci8',
 // 	'dbprefix' => '',
 // 	'pconnect' => FALSE,
-// 	'db_debug' => (ENVIRONMENT !== 'production'),
+// 	'db_debug' =>FALSE,
 // 	'cache_on' => FALSE,
 // 	'cachedir' => '',
 // 	'char_set' => 'utf8',
@@ -52,4 +29,27 @@ $db['default'] = array(
 // 	'failover' => array(),
 // 	'save_queries' => TRUE
 // );
+
+
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'rptops',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
 
