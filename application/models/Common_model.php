@@ -2,6 +2,26 @@
 class Common_model extends CI_Model 
 {
 
+
+  function login($username, $password)
+  {
+       $this->db->select('*');
+       $this->db->from('users');
+       $this->db->where('email', $username);
+       $this->db->where('upassword', $password);
+       //$this -> db -> where('userrole', '1');
+       //$this -> db -> limit(1);
+       $query = $this->db->get();
+       if($query->num_rows() == 1)
+       {
+          return $query->result();
+       } 
+       else
+       {
+         return false;
+       }
+  }
+
 	public function checklogin($allow)
   {
        $f_name = $this->router->fetch_method();
@@ -26,12 +46,8 @@ class Common_model extends CI_Model
   public function checkuserlogin($allow)
   {
        $f_name = $this->router->fetch_method();
-       $user = $this->session->userdata('passzone_reseller_data');
+       $user = $this->session->userdata('user_data');
 
-       // print_r($user);
-       // die;
-       // echo $f_name;
-       // die;
        if(empty($user))
        {
           if(in_array($f_name, $allow))   
@@ -39,7 +55,7 @@ class Common_model extends CI_Model
           return true;
         }else
         {
-          redirect("home");
+          redirect("signin");
         }
        }    
   }

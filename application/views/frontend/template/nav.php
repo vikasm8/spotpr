@@ -1,3 +1,6 @@
+<?php
+$user_role = $this->session->userdata("user_role");
+?>
 <body>
     <div class="wrapper">
         <div class="sidebar" data-active-color="rose" data-background-color="black" data-image="<?php echo base_url()?>assets/img/sidebar-1.jpg">
@@ -11,6 +14,7 @@
                    Control Panel
                 </a>
             </div>
+
             <div class="logo logo-mini">
                 <a href="#" class="simple-text">
                   CP
@@ -32,31 +36,36 @@
                     </div>
                 </div>
                 <ul class="nav">
+                    
                     <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
                         <a href="<?php echo base_url()?>dashboard">
                             <i class="material-icons">dashboard</i>
                             <p>Dashboard</p>
                         </a>
                     </li>
+                    <?php if($user_role == 1) {?>
                      <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
                         <a href="<?php echo base_url()?>dashboard">
                             <i class="material-icons">dashboard</i>
                             <p>Master Server Inventory</p>
                         </a>
                     </li>
+                     <?php } ?>
                      <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
                         <a href="<?php echo base_url()?>srtracker">
                             <i class="material-icons">dashboard</i>
                             <p>SR Tracker</p>
                         </a>
                     </li>
+                    
+                     <?php if($user_role == 1) {?>
                     <li class="<?php echo (checkTabActive(array("index")))? "active" : ""; ?>">
                         <a href="<?php echo base_url()?>users">
                             <i class="material-icons">dashboard</i>
                             <p>Team Mates</p>
                         </a>
                     </li>
-                    
+                    <?php } ?>
                     <li class="<?php echo (checkTabActive(array("logout")))? "active" : ""; ?>">
                         <a href="<?php echo base_url();?>logout">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>

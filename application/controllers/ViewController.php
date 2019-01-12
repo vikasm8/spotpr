@@ -3,18 +3,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ViewController extends CI_Controller {
 	/* FRONTEND CONTROLLER */
+
+	function __construct() {
+        parent::__construct();
+
+    }
 	public function index(){
 		
 		$this->load->view('frontend/pages/signin');
 	}
 
 	public function signin(){
-		$data = [
-			'title' => 'Sign-in User',
-			'pages' => 'signin'
-		];
 
-		$this->load->view('frontend/pages/signin', $data);
+		if(isset($_POST['loginBtn']))
+        {
+
+            $this->form_validation->set_rules('email', 'Email', 'trim|required');
+            $this->form_validation->set_rules('password', 'Password', 'trim|required');
+            $data['error'] = "";
+            if ($this->form_validation->run() == FALSE) 
+            {
+
+                $this->load->view('frontend/pages/signin', $data);
+            } 
+            else 
+            {
+
+                //Go to private area
+                $email = $this->input->post('email');
+                $password = $this->input->post('password');
+                $result = $this->common_model->login($email, $password);
+                //echo $this->db->last_query();die();
+                if ($result) {
+
+                    //print_r($result);
+                    
+                    		
+		                    	$this->session->set_userdata("user_id",$result[0]->id);
+		                        $this->session->set_userdata("user_role",$result[0]->user_status);
+		                        $this->session->set_userdata('user_data', $result[0]);
+		                        redirect('dashboard');
+
+                }
+                else 
+                {
+                    $data['error'] = "Invalid usrername or password";
+                    $this->load->view('frontend/pages/signin', $data);
+                }
+            }
+        }
+        else
+        {
+
+			$this->load->view('frontend/pages/signin', $data);
+		}
 	}
 
 	

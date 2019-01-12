@@ -91,7 +91,7 @@
                     </li>
                     
                     <li class="<?php echo (checkTabActive(array("logout")))? "active" : ""; ?>">
-                        <a href="<?php echo base_url();?>admin/logout">
+                        <a href="<?php echo base_url();?>logout">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             <p>logout</p>
                         </a>

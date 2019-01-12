@@ -83,7 +83,7 @@ th.sorting {
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                            <form action="<?php echo base_url();?>dashboard" method = "post">
+                            <form action="<?php echo base_url();?>signin" method = "post">
                                 <div class="card card-login card-hidden">
                                     <div class="card-header text-center" data-background-color="rose">
                                         <h4 class="card-title">American Airlines - RPT OPS </h4>
@@ -100,12 +100,19 @@ th.sorting {
                                            
                                             <div class="form-group label-floating">
                                                 <label class="control-label">Please Enter Email</label>
-                                                <input type="email" name="password"  class="form-control">
+                                                <input type="email" name="email"  class="form-control">
+                                            </div>
+                                        </div>
+                                         <div class="input-group">
+                                           
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">Please Enter Password</label>
+                                                <input type="password" name="password"  class="form-control">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="footer text-center">
-                                        <button type="submit" name="login" class="btn btn-rose btn-simple btn-wd btn-lg">login</button>
+                                        <button type="submit" name="loginBtn" class="btn btn-rose btn-simple btn-wd btn-lg">login</button>
                                     </div>
                                 </div>
                             </form>
