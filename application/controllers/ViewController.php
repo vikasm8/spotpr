@@ -360,7 +360,8 @@ class ViewController extends CI_Controller {
 		else
 		{
 
-			    
+			    $this->load->view('frontend/template/header');
+				$this->load->view('frontend/template/nav');
 				$this->load->view('frontend/pages/add_tracker');
 				
 
@@ -538,7 +539,8 @@ class ViewController extends CI_Controller {
 		}
 		else
 		{
-
+				$this->load->view('frontend/template/header');
+			    $this->load->view('frontend/template/nav');
 			    
 				$this->load->view('frontend/pages/add_user');
 				

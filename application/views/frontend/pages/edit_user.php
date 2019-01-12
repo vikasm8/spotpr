@@ -33,7 +33,7 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Name</label>
-                                                                <input type="text"  name="name" class="form-control" value="<?php echo (!empty($dataInfo['name']) ? $dataInfo['name'] : 'N/A'); ?>" >
+                                                                <input type="text"  name="name" class="form-control" value="<?php echo (!empty($dataInfo['uname']) ? $dataInfo['uname'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
@@ -45,7 +45,7 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Password</label>
-                                                                <input type="text"  name="password" class="form-control" value="<?php echo (!empty($dataInfo['password']) ? $dataInfo['password'] : 'N/A'); ?>" >
+                                                                <input type="text"  name="password" class="form-control" value="<?php echo (!empty($dataInfo['upassword']) ? $dataInfo['upassword'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
 
@@ -67,8 +67,8 @@
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Access Level</label>
                                                                 <select class="form-control" name="access">
-                                                                    <option  value="0" <?php if($dataInfo['access'] == 0): ?> selected="selected"<?php endif; ?>>Level1</option>
-                                                                    <option value="1" <?php if($dataInfo['access'] == 1): ?> selected="selected"<?php endif; ?>>Level2</option>
+                                                                    <option  value="0" <?php if($dataInfo['access_level'] == 0): ?> selected="selected"<?php endif; ?>>Level1</option>
+                                                                    <option value="1" <?php if($dataInfo['access_level'] == 1): ?> selected="selected"<?php endif; ?>>Level2</option>
                                                                 </select>
                                                                 
                                                             </div>
@@ -79,8 +79,8 @@
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">User Role</label>
                                                                 <select class="form-control" name="user_status">
-                                                                    <option value="0" <?php if($dataInfo['user_status'] == 0): ?> selected="selected"<?php endif; ?>>Team Manager</option>
-                                                                    <option value="1" <?php if($dataInfo['user_status'] == 1): ?> selected="selected"<?php endif; ?>>Team Mate</option>
+                                                                    <option value="1" <?php if($dataInfo['user_status'] == 1): ?> selected="selected"<?php endif; ?>>Team Manager</option>
+                                                                    <option value="0" <?php if($dataInfo['user_status'] == 0): ?> selected="selected"<?php endif; ?>>Team Mate</option>
                                                                 </select>
                                                             </div>
                                                         </div>

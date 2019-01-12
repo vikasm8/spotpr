@@ -69,7 +69,7 @@ tr {
                                           <td><?php echo (!empty($data_array['email'])?$data_array['email']:'')  ?></td>
                                           <td><?php echo (!empty($data_array['phone'])?$data_array['phone']:''); ?></td>
                                           <td><?php  if($data_array['access_level']==0) echo "Level1" ;  else  echo "Level2" ; ?></td>
-                                          <td><?php  if($data_array['user_status']==0) echo "Team Manager" ;  else  echo "Team Mate" ; ?></td>
+                                          <td><?php  if($data_array['user_status']==1) echo "Team Manager" ;  else  echo "Team Mate" ; ?></td>
                                          <!--  <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> -->
                                           
 
