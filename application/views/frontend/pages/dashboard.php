@@ -138,7 +138,7 @@ tr {
 	      // "autoWIDth": false
         dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            'copy', 'csvHtml5', 'excel',
         ]
 	    });
 	});

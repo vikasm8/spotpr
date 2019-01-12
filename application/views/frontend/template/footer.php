@@ -39,6 +39,13 @@
     <script src="<?php echo base_url()?>assets/js/material-dashboard.js"></script>
     <!-- Material Dashboard DEMO methods, don't include it in your project! -->
     <script src="<?php echo base_url()?>assets/js/demo.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.18/pdfmake.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.bootstrap.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.js"></script>
 </body>
 
 </html>
