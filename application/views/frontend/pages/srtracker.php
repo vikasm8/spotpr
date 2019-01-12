@@ -57,7 +57,7 @@ tr {
                               <th class="font_bold">Start Date</th>
                               <th class="font_bold">Change Number</th>
                               <th class="font_bold">Change Status</th>
-                              <th class="font_bold">Created Date</th>
+                              <!-- <th class="font_bold">Created Date</th> -->
                               <th class="font_bold">Action</th>
                           </thead>
                           <tbody>
@@ -81,7 +81,7 @@ tr {
                                            <td><?php echo (!empty($data_array['start_date'])?$data_array['start_date']:''); ?></td>
                                           <td><?php echo (!empty($data_array['change_number'])?$data_array['change_number']:''); ?></td>
                                           <td><?php echo (!empty($data_array['change_status'])?$data_array['change_status']:''); ?></td>
-                                          <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td>
+                                          <!-- <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> -->
                                           
 
                                           <td>

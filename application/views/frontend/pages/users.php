@@ -26,16 +26,7 @@ tr {
                 <h4 class="card-title">Team Mates</h4>
                 <div class="form-group form-button pull-left">
 
-                  <form action="<?php echo base_url().'exportCSV' ?>" method="POST">
-                  <div class="col-md-4">
-                  <input type="date" name="first_date" class="form-control">
-                  </div>
-                  <div class="col-md-4">
-                  <input type="date" name="second_date" class="form-control">
-                  </div>
-                  <div class="col-md-3">
-                  <button class="btn btn-default" type="submit">Export Data</button>
-                  </div>  
+                  
                 </div>
                 
                 <div class="form-group form-button pull-right">
@@ -56,7 +47,7 @@ tr {
                               <th class="font_bold">Phone Number</th>
                               <th class="font_bold">Access Level</th>
                               <th class="font_bold">User Role</th>
-                              <th class="font_bold">Created Date</th>
+                              <!-- <th class="font_bold">Created Date</th> -->
                               <th class="font_bold">Action</th>
                           </thead>
                           <tbody>
@@ -72,14 +63,14 @@ tr {
                                       <tr>
                                           <!-- <td><?php //echo $data_array['customer_code']?></td> -->
                                           <td><?php echo $i?></td>
-                                          <td><?php echo (isset($data_array['name']) ? $data_array['name'] : 'none');?></td>
+                                          <td><?php echo (isset($data_array['uname']) ? $data_array['uname'] : 'none');?></td>
                                     
                                           <td><?php echo (!empty($data_array['username'])?$data_array['username']:''); ?></td>
                                           <td><?php echo (!empty($data_array['email'])?$data_array['email']:'')  ?></td>
                                           <td><?php echo (!empty($data_array['phone'])?$data_array['phone']:''); ?></td>
-                                          <td><?php  if($data_array['access']==0) echo "Level1" ;  else  echo "Level2" ; ?></td>
+                                          <td><?php  if($data_array['access_level']==0) echo "Level1" ;  else  echo "Level2" ; ?></td>
                                           <td><?php  if($data_array['user_status']==0) echo "Team Manager" ;  else  echo "Team Mate" ; ?></td>
-                                          <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td>
+                                         <!--  <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> -->
                                           
 
                                           <td>

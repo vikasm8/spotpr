@@ -304,7 +304,7 @@ class ViewController extends CI_Controller {
 			$date 	 = date('m-d-Y');
 			
 
-			$res = $this->common_model->insertRecord('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status,'CREATED_DATE' => $date ));
+			$res = $this->common_model->insertRecord('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status ));
 			if($res)
 			{
 				$this->session->set_flashdata('success','Record has been updated successfully.');
