@@ -10,7 +10,7 @@
 
                     
                     
-                    <div class="card-content" style="background-color: bisque;">
+                     <div class="card-content" style="background-color: bisque;">
                         
                         <div class="tab-content">
                             <div class="tab-pane active" id="pill1">
@@ -31,19 +31,19 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Jira Number</label>
-                                                                <input type="text" readonly="readonly" name="SERVER" class="form-control" value="<?php echo (!empty($dataInfo['jira_number']) ? $dataInfo['jira_number'] : 'N/A'); ?>" >
+                                                                <input type="text" readonly="readonly" name="SERVER" class="form-control" value="<?php echo (!empty($dataInfo['JIRA_NUMBER']) ? $dataInfo['JIRA_NUMBER'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Database name</label>
-                                                                <input type="text" readonly="readonly" name="OS" value="<?php echo (!empty($dataInfo['database_name']) ? $dataInfo['database_name'] : 'N/A'); ?>" class="form-control" >
+                                                                <input type="text" readonly="readonly" name="OS" value="<?php echo (!empty($dataInfo['DATABASE_NAME']) ? $dataInfo['DATABASE_NAME'] : 'N/A'); ?>" class="form-control" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">SR Number</label>
-                                                                <input type="text" readonly="readonly" name="BLADE" class="form-control" value="<?php echo (!empty($dataInfo['sr_number']) ? $dataInfo['sr_number'] : 'N/A'); ?>" >
+                                                                <input type="text" readonly="readonly" name="BLADE" class="form-control" value="<?php echo (!empty($dataInfo['SR_NUMBER']) ? $dataInfo['SR_NUMBER'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
 
@@ -52,19 +52,19 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">SR Name</label>
-                                                                <input type="text" readonly="readonly" name="PRODUCT" class="form-control" value="<?php echo (!empty($dataInfo['sr_name']) ? $dataInfo['sr_name'] : 'N/A'); ?>" >
+                                                                <input type="text" readonly="readonly" name="PRODUCT" class="form-control" value="<?php echo (!empty($dataInfo['SR_NAME']) ? $dataInfo['SR_NAME'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Start Date</label>
-                                                                <input type="text" readonly="readonly" name="sr_name" class="form-control" value="<?php echo (!empty($dataInfo['start_date']) ? $dataInfo['start_date'] : 'N/A'); ?>"  >
+                                                                <input type="text" readonly="readonly" name="sr_name" class="form-control" value="<?php echo (!empty($dataInfo['START_DATE']) ? $dataInfo['START_DATE'] : 'N/A'); ?>"  >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Change Number</label>
-                                                                <input type="text" readonly="readonly" name="MANGER" class="form-control" value="<?php echo (!empty($dataInfo['change_number']) ? $dataInfo['change_number'] : 'N/A'); ?>"  >
+                                                                <input type="text" readonly="readonly" name="MANGER" class="form-control" value="<?php echo (!empty($dataInfo['CHANGE_NUMBER']) ? $dataInfo['CHANGE_NUMBER'] : 'N/A'); ?>"  >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -72,7 +72,7 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Change Status</label>
-                                                                <input type="text" readonly="readonly" name="COMPONENT" class="form-control" value="<?php echo (!empty($dataInfo['change_status']) ? $dataInfo['change_status'] : 'N/A'); ?>"  >
+                                                                <input type="text" readonly="readonly" name="COMPONENT" class="form-control" value="<?php echo (!empty($dataInfo['CHANGE_STATUS']) ? $dataInfo['CHANGE_STATUS'] : 'N/A'); ?>"  >
                                                             </div>
                                                         </div>
                                                         
