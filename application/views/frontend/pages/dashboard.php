@@ -194,4 +194,10 @@ tr {
       border-bottom: 1px solID #ddd !important;
       border-right: 1px solID #ddd !important;
     }
+    .buttons-html5
+    {
+      margin-right:5px !important;
+      background-color: #9c27b0 !important;
+    }
 </style> 
+

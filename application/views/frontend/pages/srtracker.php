@@ -111,20 +111,19 @@ tr {
 </div>   
 <script type="text/javascript">
 	$(function () {
-	    $('#example2').DataTable({
-	      "paging": true,
-	      // "lengthChange": false,
-	      "searching": true,
-	      "ordering": true,
-	      // "info": true,
-	      // "autoWIDth": false
+      $('#example2').DataTable({
+        "paging": true,
+        // "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        // "info": true,
+        // "autoWIDth": false
         dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            'copy', 'csvHtml5', 'excel',
         ]
-	    });
-	});
-  
+      });
+  });
 
   $(".delete").click(function(e){     
         //alert("Sure you want to delete ?");
@@ -175,5 +174,10 @@ tr {
       border-left: 1px solID #ddd !important;
       border-bottom: 1px solID #ddd !important;
       border-right: 1px solID #ddd !important;
+    }
+    .buttons-html5
+    {
+      margin-right:5px !important;
+      background-color: #9c27b0 !important;
     }
 </style> 

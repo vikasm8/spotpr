@@ -176,9 +176,9 @@ class ViewController extends CI_Controller {
 		{
 
 
-			    //$this->load->view('frontend/template/header');
+			    $this->load->view('frontend/template/header');
 			    //echo "HI";die();
-				//$this->load->view('frontend/template/nav');
+				$this->load->view('frontend/template/nav');
 				$this->load->view('frontend/pages/add_info');
 				//$this->load->view('frontend/template/footer');
 
@@ -343,10 +343,9 @@ class ViewController extends CI_Controller {
 			$change_number = $this->input->post('change_number');
 			$change_status = $this->input->post('change_status');
 			
-			$date 	 = date('m-d-Y');
-			
+			$date = date('m/d/Y H:i:s');
 
-			$res = $this->common_model->insertRecord('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status ));
+			$res = $this->common_model->insertRecord('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status, 'CREATED_DATE'=> $date ));
 			if($res)
 			{
 				$this->session->set_flashdata('success','Record has been updated successfully.');
