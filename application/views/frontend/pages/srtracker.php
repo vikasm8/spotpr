@@ -62,6 +62,7 @@ tr {
                           </thead>
                           <tbody>
                               <?php 
+                             // print_r($user); die;
                               if(!empty($user))
                               {  
                                   $i=0;
@@ -73,21 +74,21 @@ tr {
                                       <tr>
                                           <!-- <td><?php //echo $data_array['customer_code']?></td> -->
                                           <td><?php echo $i?></td>
-                                          <td><?php echo (isset($data_array['jira_number']) ? $data_array['jira_number'] : 'none');?></td>
+                                          <td><?php echo (isset($data_array['JIRA_NUMBER']) ? $data_array['JIRA_NUMBER'] : 'none');?></td>
                                     
-                                          <td><?php echo (!empty($data_array['database_name'])?$data_array['database_name']:''); ?></td>
-                                          <td><?php echo (!empty($data_array['sr_number'])?$data_array['sr_number']:'')  ?></td>
-                                          <td><?php echo (!empty($data_array['sr_name'])?$data_array['sr_name']:''); ?></td>
-                                           <td><?php echo (!empty($data_array['start_date'])?$data_array['start_date']:''); ?></td>
-                                          <td><?php echo (!empty($data_array['change_number'])?$data_array['change_number']:''); ?></td>
-                                          <td><?php echo (!empty($data_array['change_status'])?$data_array['change_status']:''); ?></td>
+                                           <td><?php echo (!empty($data_array['DATABASE_NAME'])?$data_array['DATABASE_NAME']:''); ?></td>
+                                          <td><?php echo (!empty($data_array['SR_NUMBER'])?$data_array['SR_NUMBER']:'')  ?></td>
+                                          <td><?php echo (!empty($data_array['SR_NAME'])?$data_array['SR_NAME']:''); ?></td>
+                                           <td><?php echo (!empty($data_array['START_DATE'])?$data_array['START_DATE']:''); ?></td>
+                                          <td><?php echo (!empty($data_array['CHANGE_NUMBER'])?$data_array['CHANGE_NUMBER']:''); ?></td>
+                                          <td><?php echo (!empty($data_array['CHANGE_STATUS'])?$data_array['CHANGE_STATUS']:''); ?></td>
                                           <!-- <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> -->
                                           
 
                                           <td>
-                                              <a href="<?php echo base_url().'view_tracker/'.$data_array['id']; ?>"><i class="fa fa-eye" aria-hIDden="true"></i></a>/
-                                              <a href="<?php echo base_url().'edit_tracker/'.$data_array['id']; ?>"><i class="fa fa-pencil-square-o" aria-hIDden="true"></i></a>
-                                              <a href="javascript:voID(0)" href-data="<?php echo  $data_array['id']; ?>" class="delete">
+                                              <a href="<?php echo base_url().'view_tracker/'.$data_array['ID']; ?>"><i class="fa fa-eye" aria-hIDden="true"></i></a>/
+                                              <a href="<?php echo base_url().'edit_tracker/'.$data_array['ID']; ?>"><i class="fa fa-pencil-square-o" aria-hIDden="true"></i></a>
+                                              <a href="javascript:voID(0)" href-data="<?php echo  $data_array['ID']; ?>" class="delete">
                                                   <i class="fa fa-trash-o" aria-hIDden="true"></i>
                                               </a> 
                                                

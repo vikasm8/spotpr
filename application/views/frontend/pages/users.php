@@ -63,20 +63,20 @@ tr {
                                       <tr>
                                           <!-- <td><?php //echo $data_array['customer_code']?></td> -->
                                           <td><?php echo $i?></td>
-                                          <td><?php echo (isset($data_array['uname']) ? $data_array['uname'] : 'none');?></td>
+                                          <td><?php echo (isset($data_array['UNAME']) ? $data_array['UNAME'] : 'none');?></td>
                                     
-                                          <td><?php echo (!empty($data_array['username'])?$data_array['username']:''); ?></td>
-                                          <td><?php echo (!empty($data_array['email'])?$data_array['email']:'')  ?></td>
-                                          <td><?php echo (!empty($data_array['phone'])?$data_array['phone']:''); ?></td>
-                                          <td><?php  if($data_array['access_level']==0) echo "Level1" ;  else  echo "Level2" ; ?></td>
-                                          <td><?php  if($data_array['user_status']==1) echo "Team Manager" ;  else  echo "Team Mate" ; ?></td>
+                                          <td><?php echo (!empty($data_array['USERNAME'])?$data_array['USERNAME']:''); ?></td>
+                                          <td><?php echo (!empty($data_array['EMAIL'])?$data_array['EMAIL']:'')  ?></td>
+                                          <td><?php echo (!empty($data_array['PHONE'])?$data_array['PHONE']:''); ?></td>
+                                          <td><?php  if($data_array['ACCESS_LEVEL']==0) echo "Level1" ;  else  echo "Level2" ; ?></td>
+                                          <td><?php  if($data_array['USER_STATUS']==1) echo "Team Manager" ;  else  echo "Team Mate" ; ?></td>
                                          <!--  <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> -->
                                           
 
                                           <td>
                                               <!-- <a href="<?php echo base_url().'view_tracker/'.$data_array['id']; ?>"><i class="fa fa-eye" aria-hIDden="true"></i></a>/ -->
-                                              <a href="<?php echo base_url().'edit_user/'.$data_array['id']; ?>"><i class="fa fa-pencil-square-o" aria-hIDden="true"></i></a>
-                                              <a href="javascript:voID(0)" href-data="<?php echo  $data_array['id']; ?>" class="delete">
+                                              <a href="<?php echo base_url().'edit_user/'.$data_array['ID']; ?>"><i class="fa fa-pencil-square-o" aria-hIDden="true"></i></a>
+                                              <a href="javascript:voID(0)" href-data="<?php echo  $data_array['ID']; ?>" class="delete">
                                                   <i class="fa fa-trash-o" aria-hIDden="true"></i>
                                               </a> 
                                                
