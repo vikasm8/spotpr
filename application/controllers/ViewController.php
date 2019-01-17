@@ -36,10 +36,16 @@ class ViewController extends CI_Controller {
                 //echo $this->db->last_query();die();
                 if ($result) {
 
+
                     //echo $result[0]['USER_STATUS']; die;
                     
                     		
 		                    	$this->session->set_userdata("user_id",$result[0]['ID']);
+
+                    //print_r($result);                   
+                    		
+		                    	$this->session->set_userdata("user_id",$result[0]->id);
+
 		                        $this->session->set_userdata("user_role",$result[0]['USER_STATUS']);
 		                        $this->session->set_userdata('user_data', $result[0]);
 		                        redirect('dashboard');
@@ -55,7 +61,7 @@ class ViewController extends CI_Controller {
         else
         {
 
-			$this->load->view('frontend/pages/signin', $data);
+			$this->load->view('frontend/pages/signin');
 		}
 	}
 
@@ -345,9 +351,23 @@ class ViewController extends CI_Controller {
 			
 			$date = date('m/d/Y H:i:s');
 
-			$res = $this->common_model->insertRecord('SR_TRACKER',array('JIRA_NUMBER' => $jira_number,'DATABASE_NAME' => $database_name,'SR_NUMBER' => $sr_number,'SR_NAME' => $sr_name,'START_DATE' => $start_date,'CHANGE_NUMBER' => $change_number,'CHANGE_STATUS' => $change_status ));
+			
 
 			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."')";
+
+
+			
+			
+			$maxid = 0;
+			$row = $this->db->query('SELECT ESP.srid_sequence.NEXTVAL FROM SR_TRACKER')->row();
+			if ($row) {
+			    $maxid = $row->NEXTVAL; 
+				
+			}
+
+
+			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER,SR_NAME,START_DATE,CHANGE_NUMBER,CHANGE_STATUS) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."','".$sr_name."','".$start_date."','".$change_number."','".$change_status."')";
+			$res = $this->db->query($sql);
 
 			if($res)
 			{
@@ -378,7 +398,7 @@ class ViewController extends CI_Controller {
 		if(!empty($id))
 		{
 			
-			$dataInfo = $this->common_model->getSingleRecordById('SR_TRACKER',array('id' => $id));
+			$dataInfo = $this->common_model->getSingleRecordById('SR_TRACKER',array('ID' => $id));
 			
 			
 			if(!empty($dataInfo))
@@ -417,7 +437,7 @@ class ViewController extends CI_Controller {
 			
 
 
-			$res = $this->common_model->updateData('SR_TRACKER',array('jira_number' => $jira_number,'database_name' => $database_name,'sr_number' => $sr_number,'sr_name' => $sr_name,'start_date' => $start_date,'change_number' => $change_number,'change_status' => $change_status),array('id'=>$id));
+			$res = $this->common_model->updateData('SR_TRACKER',array('JIRA_NUMBER' => $jira_number,'DATABASE_NAME' => $database_name,'SR_NUMBER' => $sr_number,'SR_NAME' => $sr_name,'START_DATE' => $start_date,'CHANGE_NUMBER' => $change_number,'CHANGE_STATUS' => $change_status),array('ID'=>$id));
 			if($res)
 			{
 				$this->session->set_flashdata('success','Data has been updated successfully.');
@@ -431,7 +451,7 @@ class ViewController extends CI_Controller {
 		if(!empty($id))
 		{
 			
-			$dataInfo = $this->common_model->getSingleRecordById('SR_TRACKER',array('id' => $id));
+			$dataInfo = $this->common_model->getSingleRecordById('SR_TRACKER',array('ID' => $id));
 			if(!empty($dataInfo))
 			{
 				
@@ -533,10 +553,16 @@ class ViewController extends CI_Controller {
 			}
 
 
-			$res = $this->common_model->insertRecord('users',array('ID'=>$maxid,'UNAME' => $name,'USERNAME' => $username,'UPASSWORD' => $password,'EMAIL' => $email,'PHONE' => $phone,'ACCESS_LEVEL' => $access,'USER_STATUS' => $user_status));
+
+			//$res = $this->common_model->insertRecord('users',array('ID'=>$maxid,'UNAME' => $name,'USERNAME' => $username,'UPASSWORD' => $password,'EMAIL' => $email,'PHONE' => $phone,'ACCESS_LEVEL' => $access,'USER_STATUS' => $user_status));
+
 
 
 			
+
+			//$res = $this->common_model->insertRecord('USERS',array('ID'=>$maxid,'UNAME' => $name,'USERNAME' => $username,'UPASSWORD' => $password,'EMAIL' => $email,'PHONE' => $phone,'ACCESS_LEVEL' => $access,'USER_STATUS' => $user_status));
+			$sql =  "INSERT into USERS (ID,UNAME,USERNAME,UPASSWORD,EMAIL,PHONE,ACCESS_LEVEL,USER_STATUS) values('".$maxid."','".$name."','".$username."','".$password."','".$email."','".$phone."','".$access."','".$user_status."')";
+
 			 $res = $this->db->query($sql);
 			if($res)
 			{
@@ -588,7 +614,9 @@ class ViewController extends CI_Controller {
 		if(!empty($id))
 		{
 			
+
 			$dataInfo = $this->common_model->getSingleRecordById('users',array('iD' => $id));
+
 			if(!empty($dataInfo))
 			{
 				
