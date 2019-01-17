@@ -15,9 +15,9 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="pill1">
 
-                                <form class="form-horizontal" method="post" action="<?php echo site_url().'edit_user/'.$dataInfo['id']; ?>">
+                                <form class="form-horizontal" method="post" action="<?php echo site_url().'edit_user/'.$dataInfo['ID']; ?>">
                                 <div class="row">
-                                    <input type="hidden" name="id" value="<?php echo $dataInfo['id']; ?>">
+                                    <input type="hidden" name="id" value="<?php echo $dataInfo['ID']; ?>">
                                     <div class="col-md-12">
                                         <div class="card">
 
@@ -33,19 +33,19 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Name</label>
-                                                                <input type="text"  name="name" class="form-control" value="<?php echo (!empty($dataInfo['uname']) ? $dataInfo['uname'] : 'N/A'); ?>" >
+                                                                <input type="text"  name="name" class="form-control" value="<?php echo (!empty($dataInfo['UNAME']) ? $dataInfo['UNAME'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Username</label>
-                                                                <input type="text"  name="username" value="<?php echo (!empty($dataInfo['username']) ? $dataInfo['username'] : 'N/A'); ?>" class="form-control" >
+                                                                <input type="text"  name="username" value="<?php echo (!empty($dataInfo['USERNAME']) ? $dataInfo['USERNAME'] : 'N/A'); ?>" class="form-control" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Password</label>
-                                                                <input type="text"  name="password" class="form-control" value="<?php echo (!empty($dataInfo['upassword']) ? $dataInfo['upassword'] : 'N/A'); ?>" >
+                                                                <input type="text"  name="password" class="form-control" value="<?php echo (!empty($dataInfo['UPASSWORD']) ? $dataInfo['UPASSWORD'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
 
@@ -54,21 +54,21 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Email</label>
-                                                                <input type="text"  name="email" class="form-control" value="<?php echo (!empty($dataInfo['email']) ? $dataInfo['email'] : 'N/A'); ?>" >
+                                                                <input type="text"  name="email" class="form-control" value="<?php echo (!empty($dataInfo['EMAIL']) ? $dataInfo['EMAIL'] : 'N/A'); ?>" >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Phone</label>
-                                                                <input type="text"  name="phone" class="form-control" value="<?php echo (!empty($dataInfo['phone']) ? $dataInfo['phone'] : 'N/A'); ?>"  >
+                                                                <input type="text"  name="phone" class="form-control" value="<?php echo (!empty($dataInfo['PHONE']) ? $dataInfo['PHONE'] : 'N/A'); ?>"  >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Access Level</label>
                                                                 <select class="form-control" name="access">
-                                                                    <option  value="0" <?php if($dataInfo['access_level'] == 0): ?> selected="selected"<?php endif; ?>>Level1</option>
-                                                                    <option value="1" <?php if($dataInfo['access_level'] == 1): ?> selected="selected"<?php endif; ?>>Level2</option>
+                                                                    <option  value="0" <?php if($dataInfo['ACCESS_LEVEL'] == 0): ?> selected="selected"<?php endif; ?>>Level1</option>
+                                                                    <option value="1" <?php if($dataInfo['ACCESS_LEVEL'] == 1): ?> selected="selected"<?php endif; ?>>Level2</option>
                                                                 </select>
                                                                 
                                                             </div>
@@ -79,8 +79,8 @@
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">User Role</label>
                                                                 <select class="form-control" name="user_status">
-                                                                    <option value="1" <?php if($dataInfo['user_status'] == 1): ?> selected="selected"<?php endif; ?>>Team Manager</option>
-                                                                    <option value="0" <?php if($dataInfo['user_status'] == 0): ?> selected="selected"<?php endif; ?>>Team Mate</option>
+                                                                    <option value="1" <?php if($dataInfo['USER_STATUS'] == 1): ?> selected="selected"<?php endif; ?>>Team Manager</option>
+                                                                    <option value="0" <?php if($dataInfo['USER_STATUS'] == 0): ?> selected="selected"<?php endif; ?>>Team Mate</option>
                                                                 </select>
                                                             </div>
                                                         </div>
