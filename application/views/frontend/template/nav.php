@@ -69,7 +69,7 @@ $user_role = $this->session->userdata("user_role");
                     <li class="<?php echo (checkTabActive(array("logout")))? "active" : ""; ?>">
                         <a href="<?php echo base_url();?>logout">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
-                            <p>logout<?php echo $user_role; ?></p>
+                            <p>logout</p>
                         </a>
                     </li>
                 </ul>
