@@ -59,8 +59,15 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
-                                                                <label class="control-label">Start Date</label>
+                                                                <label class="control-label">Start Date Time</label>
                                                                 <input type="text"  name="start_date" class="form-control" value="<?php echo (!empty($dataInfo['START_DATE']) ? $dataInfo['START_DATE'] : 'N/A'); ?>"  >
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <div class="form-group label-floating">
+                                                                <label class="control-label">End Date Time</label>
+                                                                <input type="text"  name="end_date" class="form-control" value="<?php echo (!empty($dataInfo['END_DATE']) ? $dataInfo['END_DATE'] : 'N/A'); ?>"  >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">

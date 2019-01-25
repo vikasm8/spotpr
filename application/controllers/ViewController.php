@@ -339,6 +339,7 @@ class ViewController extends CI_Controller {
 			$sr_number = $this->input->post('sr_number');
 			$sr_name = $this->input->post('sr_name');
 			$start_date = $this->input->post('start_date');
+			$end_date = $this->input->post('end_date');
 			$change_number = $this->input->post('change_number');
 			$change_status = $this->input->post('change_status');
 			
@@ -352,7 +353,7 @@ class ViewController extends CI_Controller {
 			}
 
 
-			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER,SR_NAME,START_DATE,CHANGE_NUMBER,CHANGE_STATUS) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."','".$sr_name."','".$start_date."','".$change_number."','".$change_status."', sysdate)";
+			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER,SR_NAME,START_DATE,END_DATE,CHANGE_NUMBER,CHANGE_STATUS) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."','".$sr_name."','".$start_date."','".$end_date."','".$change_number."','".$change_status."', sysdate)";
 			$res = $this->db->query($sql);
 			if($res)
 			{
@@ -416,13 +417,14 @@ class ViewController extends CI_Controller {
 			$sr_number = $this->input->post('sr_number');
 			$sr_name = $this->input->post('sr_name');
 			$start_date = $this->input->post('start_date');
+			$end_date = $this->input->post('end_date');
 			$change_number = $this->input->post('change_number');
 			$change_status = $this->input->post('change_status');
 			
 			
 
 
-			$res = $this->common_model->updateData('SR_TRACKER',array('JIRA_NUMBER' => $jira_number,'DATABASE_NAME' => $database_name,'SR_NUMBER' => $sr_number,'SR_NAME' => $sr_name,'START_DATE' => $start_date,'CHANGE_NUMBER' => $change_number,'CHANGE_STATUS' => $change_status),array('ID'=>$id));
+			$res = $this->common_model->updateData('SR_TRACKER',array('JIRA_NUMBER' => $jira_number,'DATABASE_NAME' => $database_name,'SR_NUMBER' => $sr_number,'SR_NAME' => $sr_name,'START_DATE' => $start_date,'END_DATE' => $end_date,'CHANGE_NUMBER' => $change_number,'CHANGE_STATUS' => $change_status),array('ID'=>$id));
 			if($res)
 			{
 				$this->session->set_flashdata('success','Data has been updated successfully.');

@@ -52,8 +52,15 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
-                                                                <label class="control-label">Start Date</label>
-                                                                <input type="date"  name="start_date" class="form-control" value=""  >
+                                                                <label class="control-label">Start Date Time</label>
+                                                                <input type="datetime-local"  name="start_date" class="form-control" value=""  >
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <div class="form-group label-floating">
+                                                                <label class="control-label">End Date Time</label>
+                                                                <input type="datetime-local"  name="end_date" class="form-control" value=""  >
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">

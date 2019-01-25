@@ -1,0 +1,19 @@
+1. To Modify Created_date column as Timestamp in CAPSPLAN_DATA table
+
+ALTER TABLE CREATED_DATE CAPSPLAN_DATA   
+  MODIFY CREATED_DATE timestamp default systimestamp
+
+
+2. To Modify Created_date column as Timestamp in SR_TRACKER table
+
+ALTER TABLE SR_TRACKER   
+  MODIFY CREATED_DATE timestamp default systimestamp
+
+
+3. Add new Column END_DATE in SR_TRACKER Table
+
+ALTER TABLE SR_TRACKER
+  ADD (END_DATE TIMESTAMP);
+
+
+
