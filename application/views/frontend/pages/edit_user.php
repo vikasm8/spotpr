@@ -45,11 +45,7 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group label-floating">
                                                                 <label class="control-label">Password</label>
-
-                                                                <input type="text"  name="password" class="form-control" value="<?php echo (!empty($dataInfo['USPASSWORD']) ? $dataInfo['UPASSWORD'] : 'N/A'); ?>" >
-
                                                                 <input type="text"  name="password" class="form-control" value="<?php echo (!empty($dataInfo['UPASSWORD']) ? $dataInfo['UPASSWORD'] : 'N/A'); ?>" >
-
                                                             </div>
                                                         </div>
 

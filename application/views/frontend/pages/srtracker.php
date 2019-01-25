@@ -55,9 +55,10 @@ tr {
                               <th class="font_bold">SR Number</th>
                               <th class="font_bold">SR Name</th>
                               <th class="font_bold">Start Date</th>
+                              <th class="font_bold">End Date</th>
                               <th class="font_bold">Change Number</th>
                               <th class="font_bold">Change Status</th>
-                              <!-- <th class="font_bold">Created Date</th> -->
+                              <th class="font_bold">Created Date</th>
                               <th class="font_bold">Action</th>
                           </thead>
                           <tbody>
@@ -79,10 +80,11 @@ tr {
                                            <td><?php echo (!empty($data_array['DATABASE_NAME'])?$data_array['DATABASE_NAME']:''); ?></td>
                                           <td><?php echo (!empty($data_array['SR_NUMBER'])?$data_array['SR_NUMBER']:'')  ?></td>
                                           <td><?php echo (!empty($data_array['SR_NAME'])?$data_array['SR_NAME']:''); ?></td>
-                                           <td><?php echo (!empty($data_array['START_DATE'])?$data_array['START_DATE']:''); ?></td>
+                                          <td><?php echo (!empty($data_array['START_DATE'])?$data_array['START_DATE']:''); ?></td>
+                                          <td><?php echo (!empty($data_array['END_DATE'])?$data_array['END_DATE']:''); ?></td>
                                           <td><?php echo (!empty($data_array['CHANGE_NUMBER'])?$data_array['CHANGE_NUMBER']:''); ?></td>
                                           <td><?php echo (!empty($data_array['CHANGE_STATUS'])?$data_array['CHANGE_STATUS']:''); ?></td>
-                                          <!-- <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> -->
+                                          <td><?php echo (!empty($data_array['CREATED_DATE'])?$data_array['CREATED_DATE']:''); ?></td> 
                                           
 
                                           <td>

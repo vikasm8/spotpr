@@ -36,16 +36,9 @@ class ViewController extends CI_Controller {
                 //echo $this->db->last_query();die();
                 if ($result) {
 
-
-                    //echo $result[0]['USER_STATUS']; die;
-                    
-                    		
-		                    	$this->session->set_userdata("user_id",$result[0]['ID']);
-
                     //print_r($result);                   
                     		
 		                    	$this->session->set_userdata("user_id",$result[0]->id);
-
 		                        $this->session->set_userdata("user_role",$result[0]['USER_STATUS']);
 		                        $this->session->set_userdata('user_data', $result[0]);
 		                        redirect('dashboard');
@@ -182,9 +175,9 @@ class ViewController extends CI_Controller {
 		{
 
 
-			    $this->load->view('frontend/template/header');
+			    //$this->load->view('frontend/template/header');
 			    //echo "HI";die();
-				$this->load->view('frontend/template/nav');
+				//$this->load->view('frontend/template/nav');
 				$this->load->view('frontend/pages/add_info');
 				//$this->load->view('frontend/template/footer');
 
@@ -349,14 +342,7 @@ class ViewController extends CI_Controller {
 			$change_number = $this->input->post('change_number');
 			$change_status = $this->input->post('change_status');
 			
-			$date = date('m/d/Y H:i:s');
-
-			
-
-			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."')";
-
-
-			
+			$date 	 = date('m-d-Y');
 			
 			$maxid = 0;
 			$row = $this->db->query('SELECT ESP.srid_sequence.NEXTVAL FROM SR_TRACKER')->row();
@@ -366,9 +352,8 @@ class ViewController extends CI_Controller {
 			}
 
 
-			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER,SR_NAME,START_DATE,CHANGE_NUMBER,CHANGE_STATUS) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."','".$sr_name."','".$start_date."','".$change_number."','".$change_status."')";
+			$sql =  "INSERT into SR_TRACKER (ID,JIRA_NUMBER,DATABASE_NAME,SR_NUMBER,SR_NAME,START_DATE,CHANGE_NUMBER,CHANGE_STATUS) values('".$maxid."','".$jira_number."','".$database_name."','".$sr_number."','".$sr_name."','".$start_date."','".$change_number."','".$change_status."', sysdate)";
 			$res = $this->db->query($sql);
-
 			if($res)
 			{
 				$this->session->set_flashdata('success','Record has been updated successfully.');
@@ -553,16 +538,8 @@ class ViewController extends CI_Controller {
 			}
 
 
-
-			//$res = $this->common_model->insertRecord('users',array('ID'=>$maxid,'UNAME' => $name,'USERNAME' => $username,'UPASSWORD' => $password,'EMAIL' => $email,'PHONE' => $phone,'ACCESS_LEVEL' => $access,'USER_STATUS' => $user_status));
-
-
-
-			
-
 			//$res = $this->common_model->insertRecord('USERS',array('ID'=>$maxid,'UNAME' => $name,'USERNAME' => $username,'UPASSWORD' => $password,'EMAIL' => $email,'PHONE' => $phone,'ACCESS_LEVEL' => $access,'USER_STATUS' => $user_status));
 			$sql =  "INSERT into USERS (ID,UNAME,USERNAME,UPASSWORD,EMAIL,PHONE,ACCESS_LEVEL,USER_STATUS) values('".$maxid."','".$name."','".$username."','".$password."','".$email."','".$phone."','".$access."','".$user_status."')";
-
 			 $res = $this->db->query($sql);
 			if($res)
 			{
@@ -614,9 +591,7 @@ class ViewController extends CI_Controller {
 		if(!empty($id))
 		{
 			
-
-			$dataInfo = $this->common_model->getSingleRecordById('users',array('iD' => $id));
-
+			$dataInfo = $this->common_model->getSingleRecordById('USERS',array('ID' => $id));
 			if(!empty($dataInfo))
 			{
 				
@@ -640,8 +615,47 @@ class ViewController extends CI_Controller {
 
 	/* ----------------- End Define Methods for Team Mates------------------*/
 
+	/* ------------------------------------------------------------------------------------*/
+
+     /* ----------------- Define Methods for Send Mail------------------*/
+
+
+
+     public function send_mail()
+     {
+     	$to = "rahuliitm69@gmail.com";
+            $subject = "SR Tracker Daily Report";
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";           
+            $message = "
+            <html>
+            <head>
+            <title>Report Log</title>
+            </head>
+            <body>";
+            $body = "<h3>Log of SR Tracker Report </h3>";
+
+            $query = $this->db->query('SELECT * FROM SR_TRACKER');
+
+			$result = $query->result_array();
+
+            $body .= "<table class='TFtable' border='1' style='width':100%>"; //starts the table tag
+            $body .= "<tr><td>jira_number</td><td>DATABASE_NAME</td><td>SR_NAME</td><td>SR_NUMBER</td><td>SR_NAME</td><td>START_DATE</td></tr>"; //sets headings
+            foreach($result as $row) { //loops for each result
+            $body .= "<tr><td>".$row['jira_number']."</td><td>".$row['DATABASE_NAME']."</td><td>".$row['SR_NUMBER']. "</td><td>".$row['SR_NAME']."</td><td>".$row['START_DATE']."</td><td>".$row['CHANGE_NUMBER']."</td>";
+            }
+
+            $body .= "</table>"; //closes the table
+            $message .= $body . "
+            </body>
+            </html>";
+            $message = wordwrap($message, 70);    
+            mail($to,$subject,$message,$headers);
+     }
+
+
+
 }
 
 /* End of file ViewController.php */
 /* Location: ./application/controllers/ViewController.php */
-
