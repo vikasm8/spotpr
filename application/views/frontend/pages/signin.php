@@ -26,9 +26,9 @@
         background: #1a4bb1 !important;
     }
         button.btn.btn-rose.btn-simple.btn-wd.btn-lg {
-    border: solid 1px;
-    color: red;
-    }
+       border: solid 1px;
+    color: #0294ce;
+}
 
     .card-header.text-center {
         background: #0c72af  !important;
